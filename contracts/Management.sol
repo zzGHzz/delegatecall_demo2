@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.7.0 < 0.8.0;
 
-import "./B.sol";
+import "./Operation.sol";
 
-contract A {
-    struct DataStorage {
+contract Management {
+    struct Object {
         uint val;
     }
     
@@ -16,12 +16,21 @@ contract A {
         delegate = _delegate;
     }
 
-    function newB() external {
+    function newObject() external {
         bytes32 ptr = keccak256(abi.encode(msg.sender, counter));
         ptrs.push(ptr);
         counter = counter + 1;
 
-        emit NewB(msg.sender, ptr);
+        initObject(ptr);
+
+        emit NewObject(msg.sender, ptr);
+    }
+
+    function initObject(bytes32 ptr) internal {
+        Object storage ds;
+        assembly { ds.slot := ptr }
+
+        // Todo: initialize the new instance here
     }
 
     function set(uint i, uint val) external {
@@ -38,5 +47,5 @@ contract A {
         return abi.decode(result, (uint));
     }
 
-    event NewB(address from, bytes32 ptr);
+    event NewObject(address from, bytes32 ptr);
 }

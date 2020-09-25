@@ -1,23 +1,21 @@
-const A = artifacts.require('A')
-const B = artifacts.require('B')
+const Management = artifacts.require('Management')
 
 contract('DELEGATECALL_DEMO2', async accounts => {
-    let a, b
+    let manager
     let inst
 
     before(async () => {
-        a = await A.deployed()
-        b = await B.deployed()
+        manager = await Management.deployed()
     })
 
-    it('Test delegatecall', async () => {
+    it('Test', async () => {
         const val = 100
         const i = 0
 
-        inst = new web3.eth.Contract(A.abi, a.address)
+        inst = new web3.eth.Contract(Management.abi, manager.address)
     
         // Create an instance of B and get the contract address
-        await inst.methods.newB().send({from: accounts[0]})
+        await inst.methods.newObject().send({from: accounts[0]})
 
         // Testing set/get
         await inst.methods.set(i, val).send({from: accounts[0]})
